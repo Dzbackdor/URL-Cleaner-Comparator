@@ -34,7 +34,7 @@ python cek.py backlinks.txt --mode domain
 
 #### Hapus duplikat URL exact:
 ```bash
-python cek.py backlinks.txt --mode url
+python cek.py lama.txt --mode url
 ```
 
 #### Dengan output file custom:
