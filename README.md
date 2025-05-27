@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 #### Hapus duplikat berdasarkan domain (1 URL per domain):
 ```bash
-python cek.py backlinks.txt --mode domain
+python cek.py lama.txt --mode domain
 ```
 
 #### Hapus duplikat URL exact:
