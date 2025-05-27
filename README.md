@@ -4,6 +4,9 @@
 
 <img src="/comparator.png" width="600" alt="URL-Cleaner-Comparator">
 
+Rekomendasi menggunakan tools ini dengan tools pelengkapnya
+- [moz-pro-without-api-key](https://github.com/Dzbackdor/moz-pro-without-api-key)
+
 ## Fitur
 
 - ✅ **Pembersihan Duplikat**: Hapus duplikat URL berdasarkan URL exact atau domain
@@ -12,7 +15,7 @@
 - ✅ **Mode Fleksibel**: Pilih perbandingan berdasarkan domain atau URL lengkap
 - ✅ **Statistik Detail**: Laporan lengkap tentang proses pembersihan/perbandingan
 
-## Instalasi
+## 📦 Instalasi
 
 1. Clone repository ini:
 ```bash
@@ -25,7 +28,12 @@ cd URL-Cleaner-Comparator
 pip install -r requirements.txt
 ```
 
-## Penggunaan
+3. **Melihat bantuan:**
+```bash
+python cek.py -h
+```
+
+## 🎯 Penggunaan
 
 ### 1. Membersihkan Duplikat URL
 
@@ -61,7 +69,9 @@ python cek.py baru.txt --compare lama.txt --compare-mode url
 python cek.py baru.txt --compare lama.txt --compare-mode domain --output url_belum_ada.txt
 ```
 
-## Contoh Penggunaan
+
+
+## 🎮 Contoh Penggunaan
 
 ### Contoh 1: Membersihkan Duplikat Domain
 
@@ -86,17 +96,7 @@ https://facebook.com/page1
 https://twitter.com
 ```
 
-**Hasil di terminal:**
-```
-============================================================
-PEMBERSIHAN SELESAI!
-============================================================
-URL asli: 5
-Domain unik: 3
-Duplikat domain dihapus: 2
-URL tidak valid dihapus: 0
-File bersih disimpan ke: backlinks_bersih_domain.txt
-```
+
 
 ### Contoh 2: Perbandingan File (Mode Domain)
 
@@ -126,21 +126,6 @@ https://twitter.com
 https://instagram.com/profile
 ```
 
-**Hasil di terminal:**
-```
-============================================================
-PERBANDINGAN SELESAI!
-============================================================
-URL diproses dari file baru: 5
-Domain baru ditemukan: 2
-Sudah ada sebelumnya: 3
-URL tidak valid: 0
-Hasil disimpan ke: baru_domain_baru.txt
-
-2 domain baru:
- 1. twitter.com -> https://twitter.com
- 2. instagram.com -> https://instagram.com/profile
-```
 
 ### Contoh 3: Perbandingan File (Mode URL)
 
@@ -160,19 +145,8 @@ https://twitter.com
 https://instagram.com/profile
 ```
 
-**Hasil di terminal:**
-```
-============================================================
-PERBANDINGAN SELESAI!
-============================================================
-URL diproses dari file baru: 5
-URL baru ditemukan: 5
-Sudah ada sebelumnya: 0
-URL tidak valid: 0
-Hasil disimpan ke: baru_url_baru.txt
-```
 
-## Parameter dan Opsi
+## 🔗 Parameter dan Opsi
 
 ### Parameter Wajib
 - `input_file`: File input dengan daftar URL
@@ -193,7 +167,7 @@ Hasil disimpan ke: baru_url_baru.txt
 #### Output
 - `--output FILE`: Nama file output (default: otomatis)
 
-## Format File Input
+## 📋 Format File Input
 
 File input harus berupa file teks (.txt) dengan satu URL per baris:
 
@@ -233,7 +207,7 @@ www.twitter.com
 - **Hasil**: Lebih banyak URL, termasuk halaman berbeda dari domain sama
 - **Use case**: Mencari artikel/halaman baru untuk guest post
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
 ### Error "File tidak ditemukan"
 ```bash
@@ -267,5 +241,6 @@ Pastikan file input menggunakan encoding UTF-8.
 - ✅ Mode domain dan URL
 - ✅ Normalisasi URL otomatis
 - ✅ Statistik detail
-
 ---
+
+**Made with ❤️ by Dzone**
