@@ -1,6 +1,8 @@
 # Python SEO Tools - URL Cleaner & Comparator
 
-Script Python untuk membersihkan duplikat URL dari file backlinks dan membandingkan dua file URL untuk menemukan URL yang belum ada.
+🐍 Script Python untuk membersihkan duplikat URL dari file backlinks dan membandingkan dua file URL untuk menemukan URL yang belum ada.
+
+<img src="/comparator.png" width="600" alt="URL-Cleaner-Comparator">
 
 ## Fitur
 
