@@ -1,246 +1,503 @@
-# Python SEO Tools - URL Cleaner & Comparator
+````markdown
+# Python URL / Host / File Comparator
 
-🐍 Script Python untuk membersihkan duplikat URL dari file backlinks dan membandingkan dua file URL untuk menemukan URL yang belum ada.
+🐍 Script Python untuk membersihkan duplikat dan membandingkan daftar:
 
-<img src="/comparator.png" width="600" alt="URL-Cleaner-Comparator">
+- URL
+- Domain
+- Host/Subdomain
+- Nama File
 
-Rekomendasi menggunakan tools ini dengan tools pelengkapnya
-- [moz-pro-without-api-key](https://github.com/Dzbackdor/moz-pro-without-api-key)
+Script ini cocok digunakan untuk mengelola daftar backlink, domain, subdomain, maupun nama file seperti hasil crawl Common Crawl.
 
-## Fitur
+<img src="/comparator.png" width="700" alt="Python URL Comparator">
 
-- ✅ **Pembersihan Duplikat**: Hapus duplikat URL berdasarkan URL exact atau domain
-- ✅ **Perbandingan File**: Bandingkan file baru dengan file lama untuk menemukan URL yang belum ada
-- ✅ **Normalisasi URL**: Otomatis menormalisasi URL untuk konsistensi
-- ✅ **Mode Fleksibel**: Pilih perbandingan berdasarkan domain atau URL lengkap
-- ✅ **Statistik Detail**: Laporan lengkap tentang proses pembersihan/perbandingan
+## Rekomendasi Tools
 
-## 📦 Instalasi
+Tools ini dapat digunakan bersama:
 
-1. Clone repository ini:
+- https://github.com/Dzbackdor/moz-pro-without-api-key
+
+---
+
+# Features
+
+- ✅ Membersihkan duplikat URL
+- ✅ Membersihkan duplikat Domain
+- ✅ Membersihkan duplikat Host/Subdomain
+- ✅ Membersihkan duplikat Nama File
+- ✅ Membandingkan file baru dengan file lama
+- ✅ Normalisasi URL otomatis
+- ✅ Opsi penambahan slash (`/`) di akhir URL
+- ✅ Opsi menggabungkan file lama dengan data baru (`--merge-old`)
+- ✅ Output berwarna (Colorama)
+
+---
+
+# Instalasi
+
+Clone repository
+
 ```bash
 git clone https://github.com/Dzbackdor/URL-Cleaner-Comparator.git
 cd URL-Cleaner-Comparator
 ```
 
-2. **Install dependencies:**
+Install dependency
+
 ```bash
 pip install -r requirements.txt
 ```
 
-3. **Melihat bantuan:**
+Melihat bantuan
+
 ```bash
-python cek.py -h
+python new.py -h
 ```
 
-## 🎯 Penggunaan
-
-### 1. Membersihkan Duplikat URL
-
-#### Hapus duplikat berdasarkan domain (1 URL per domain):
-```bash
-python cek.py lama.txt --mode domain
-```
-
-#### Hapus duplikat URL exact:
-```bash
-python cek.py lama.txt --mode url
-```
-
-#### Dengan output file custom:
-```bash
-python cek.py backlinks.txt --mode domain --output hasil_bersih.txt
-```
-
-### 2. Membandingkan Dua File URL
-
-#### Perbandingan berdasarkan domain:
-```bash
-python cek.py baru.txt --compare lama.txt --compare-mode domain
-```
-
-#### Perbandingan berdasarkan URL lengkap:
-```bash
-python cek.py baru.txt --compare lama.txt --compare-mode url
-```
-
-#### Dengan output file custom:
-```bash
-python cek.py baru.txt --compare lama.txt --compare-mode domain --output url_belum_ada.txt
-```
-
-
-
-## 🎮 Contoh Penggunaan
-
-### Contoh 1: Membersihkan Duplikat Domain
-
-**File input (`backlinks.txt`):**
-```
-https://google.com
-https://google.com/search
-https://facebook.com/page1
-https://facebook.com/page2
-https://twitter.com
-```
-
-**Perintah:**
-```bash
-python cek.py backlinks.txt --mode domain
-```
-
-**Output (`backlinks_bersih_domain.txt`):**
-```
-https://google.com
-https://facebook.com/page1
-https://twitter.com
-```
-
-
-
-### Contoh 2: Perbandingan File (Mode Domain)
-
-**File lama (`lama.txt`):**
-```
-https://google.com
-https://facebook.com/page1
-```
-
-**File baru (`baru.txt`):**
-```
-https://google.com/search
-https://google.com/maps
-https://facebook.com/page2
-https://twitter.com
-https://instagram.com/profile
-```
-
-**Perintah:**
-```bash
-python cek.py baru.txt --compare lama.txt --compare-mode domain
-```
-
-**Output (`baru_domain_baru.txt`):**
-```
-https://twitter.com
-https://instagram.com/profile
-```
-
-
-### Contoh 3: Perbandingan File (Mode URL)
-
-**Dengan file yang sama seperti Contoh 2:**
-
-**Perintah:**
-```bash
-python cek.py baru.txt --compare lama.txt --compare-mode url
-```
-
-**Output (`baru_url_baru.txt`):**
-```
-https://google.com/search
-https://google.com/maps
-https://facebook.com/page2
-https://twitter.com
-https://instagram.com/profile
-```
-
-
-## 🔗 Parameter dan Opsi
-
-### Parameter Wajib
-- `input_file`: File input dengan daftar URL
-
-### Parameter Opsional
-
-#### Mode Pembersihan
-- `--mode {url,domain}`: Mode pembersihan (default: domain)
-  - `url`: Hapus duplikat URL exact
-  - `domain`: Satu URL per domain
-
-#### Mode Perbandingan
-- `--compare FILE_LAMA`: Bandingkan dengan file lama
-- `--compare-mode {url,domain}`: Mode perbandingan (default: domain)
-  - `url`: Perbandingan URL exact
-  - `domain`: Perbandingan berdasarkan domain
-
-#### Output
-- `--output FILE`: Nama file output (default: otomatis)
-
-## 📋 Format File Input
-
-File input harus berupa file teks (.txt) dengan satu URL per baris:
-
-```
-https://example.com
-http://google.com/search
-facebook.com/page
-www.twitter.com
-```
-
-**Catatan:** Script akan otomatis menormalisasi URL (menambah http://, menghapus www untuk perbandingan, dll.)
-
-## Nama File Output Otomatis
-
-| Mode | Suffix File Output |
-|------|-------------------|
-| Pembersihan domain | `_bersih_domain.txt` |
-| Pembersihan URL | `_bersih.txt` |
-| Perbandingan domain | `_domain_baru.txt` |
-| Perbandingan URL | `_url_baru.txt` |
-
-**Contoh:**
-- Input: `backlinks.txt` → Output: `backlinks_bersih_domain.txt`
-- Input: `baru.txt` dengan `--compare` → Output: `baru_domain_baru.txt`
-
-## Perbedaan Mode Domain vs URL
-
-### Mode Domain
-- **Tujuan**: Diversifikasi domain
-- **Logika**: Satu URL per domain
-- **Hasil**: Lebih sedikit URL, fokus pada domain unik
-- **Use case**: Mencari website/domain baru untuk backlink
-
-### Mode URL
-- **Tujuan**: Mencari halaman/konten baru
-- **Logika**: Setiap URL unik disimpan
-- **Hasil**: Lebih banyak URL, termasuk halaman berbeda dari domain sama
-- **Use case**: Mencari artikel/halaman baru untuk guest post
-
-## 🔧 Troubleshooting
-
-### Error "File tidak ditemukan"
-```bash
-Error: File 'namafile.txt' tidak ditemukan!
-```
-**Solusi**: Pastikan file ada di direktori yang sama atau gunakan path lengkap.
-
-### URL tidak valid
-Script akan otomatis melewati URL yang tidak valid dan melaporkannya di statistik akhir.
-
-### Encoding error
-Pastikan file input menggunakan encoding UTF-8.
-
-## Kontribusi
-
-1. Fork repository ini
-2. Buat branch fitur baru (`git checkout -b fitur-baru`)
-3. Commit perubahan (`git commit -am 'Tambah fitur baru'`)
-4. Push ke branch (`git push origin fitur-baru`)
-5. Buat Pull Request
-
-## Author
-
-**Dzbackdor** - [GitHub](https://github.com/Dzbackdor)
-
-## Changelog
-
-### v1.0.0
-- ✅ Fitur pembersihan duplikat URL
-- ✅ Fitur perbandingan dua file
-- ✅ Mode domain dan URL
-- ✅ Normalisasi URL otomatis
-- ✅ Statistik detail
 ---
 
-**Made with ❤️ by Dzone**
+# Penggunaan
+
+## Membersihkan Duplikat URL
+
+```bash
+python new.py \
+-l url.txt \
+-m url \
+-o hasil.txt
+```
+
+---
+
+## Membersihkan Duplikat Domain
+
+```bash
+python new.py \
+-l url.txt \
+-m domain \
+-o hasil.txt
+```
+
+---
+
+## Membersihkan Duplikat Host/Subdomain
+
+```bash
+python new.py \
+-l host.txt \
+-m host \
+-o hasil.txt
+```
+
+Contoh isi file:
+
+```text
+google.com
+google.com
+mail.google.com
+api.google.com
+mail.google.com
+```
+
+Output:
+
+```text
+google.com
+mail.google.com
+api.google.com
+```
+
+---
+
+## Membersihkan Duplikat Nama File
+
+```bash
+python new.py \
+-l files.txt \
+-m file \
+-o hasil.txt
+```
+
+Contoh isi file:
+
+```text
+CC-MAIN-001.txt
+CC-MAIN-001.txt
+CC-MAIN-002.txt
+CC-MAIN-003.txt
+```
+
+Output:
+
+```text
+CC-MAIN-001.txt
+CC-MAIN-002.txt
+CC-MAIN-003.txt
+```
+
+---
+
+# Membandingkan Dua File
+
+## URL
+
+```bash
+python new.py \
+-l baru.txt \
+-c lama.txt \
+-m url \
+-o hasil.txt
+```
+
+Output hanya berisi URL yang belum ada pada file lama.
+
+---
+
+## Domain
+
+```bash
+python new.py \
+-l baru.txt \
+-c lama.txt \
+-m domain \
+-o hasil.txt
+```
+
+Output hanya berisi domain yang belum ada.
+
+---
+
+## Host/Subdomain
+
+```bash
+python new.py \
+-l host-baru.txt \
+-c host-lama.txt \
+-m host \
+-o hasil.txt
+```
+
+---
+
+## Nama File
+
+```bash
+python new.py \
+-l file-baru.txt \
+-c file-lama.txt \
+-m file \
+-o hasil.txt
+```
+
+---
+
+# Merge Output
+
+Secara default output hanya berisi data baru.
+
+Jika ingin menggabungkan isi file lama dengan data baru gunakan:
+
+```bash
+python new.py \
+-l baru.txt \
+-c lama.txt \
+-m domain \
+-o hasil.txt \
+--merge-old
+```
+
+Output:
+
+```text
+Isi file lama
++
+Semua data baru yang belum ada
+```
+
+---
+
+# Menambahkan Slash
+
+Script dapat menambahkan slash (`/`) pada akhir URL.
+
+Contoh:
+
+Input
+
+```text
+https://example.com/path
+```
+
+Perintah
+
+```bash
+python new.py \
+-l url.txt \
+-m url \
+-o hasil.txt \
+-s
+```
+
+Output
+
+```text
+https://example.com/path/
+```
+
+Opsi yang sama dapat ditulis sebagai:
+
+```bash
+--slash
+```
+
+---
+
+# Mode
+
+## URL
+
+Membandingkan URL secara penuh.
+
+Contoh:
+
+```text
+https://example.com/a
+https://example.com/b
+```
+
+Dianggap **berbeda**.
+
+---
+
+## Domain
+
+Membandingkan berdasarkan domain.
+
+Contoh:
+
+```text
+https://example.com/a
+https://example.com/b
+```
+
+Dianggap **sama** karena berasal dari domain yang sama.
+
+Output tetap menggunakan URL pertama yang ditemukan.
+
+---
+
+## Host
+
+Digunakan untuk daftar domain atau subdomain.
+
+Contoh:
+
+```text
+example.com
+api.example.com
+mail.example.com
+```
+
+Setiap host dianggap berbeda.
+
+---
+
+## File
+
+Digunakan untuk membandingkan nama file.
+
+Contoh:
+
+```text
+CC-MAIN-20251007013002-00574.txt
+CC-MAIN-20251007013002-00575.txt
+```
+
+---
+
+# Parameter
+
+| Parameter | Keterangan |
+|------------|------------|
+| `-l`, `--list` | File input |
+| `-o`, `--output` | File output |
+| `-m`, `--mode` | Mode (`url`, `domain`, `host`, `file`) |
+| `-c`, `--compare` | File lama untuk dibandingkan |
+| `--merge-old` | Gabungkan isi file lama dengan data baru |
+| `-s`, `--slash` | Tambahkan slash (`/`) di akhir URL |
+
+---
+
+# Contoh Penggunaan
+
+Membersihkan URL
+
+```bash
+python new.py -l url.txt -m url -o output.txt
+```
+
+Membersihkan Domain
+
+```bash
+python new.py -l url.txt -m domain -o output.txt
+```
+
+Membersihkan Host
+
+```bash
+python new.py -l host.txt -m host -o output.txt
+```
+
+Membersihkan Nama File
+
+```bash
+python new.py -l files.txt -m file -o output.txt
+```
+
+Membandingkan URL
+
+```bash
+python new.py -l baru.txt -c lama.txt -m url -o hasil.txt
+```
+
+Membandingkan Domain
+
+```bash
+python new.py -l baru.txt -c lama.txt -m domain -o hasil.txt
+```
+
+Merge Output
+
+```bash
+python new.py -l baru.txt -c lama.txt -m domain -o hasil.txt --merge-old
+```
+
+Tambah Slash
+
+```bash
+python new.py -l url.txt -m url -o hasil.txt -s
+```
+
+---
+
+# Format File Input
+
+## URL
+
+```text
+https://example.com
+https://google.com/search
+https://github.com
+```
+
+---
+
+## Host
+
+```text
+google.com
+mail.google.com
+api.google.com
+```
+
+---
+
+## Nama File
+
+```text
+CC-MAIN-20251007013002-00574.txt
+CC-MAIN-20251007013002-00575.txt
+```
+
+---
+
+# Output
+
+Seluruh hasil akan disimpan ke file yang ditentukan menggunakan parameter:
+
+```bash
+-o output.txt
+```
+
+Parameter ini **wajib** diberikan.
+
+---
+
+# Troubleshooting
+
+## File tidak ditemukan
+
+```text
+Error: File tidak ditemukan
+```
+
+Pastikan nama file benar atau gunakan path lengkap.
+
+---
+
+## URL tidak valid
+
+URL yang tidak valid akan diabaikan dan dihitung pada statistik akhir.
+
+---
+
+## Encoding
+
+Gunakan file UTF-8 agar seluruh karakter dapat dibaca dengan benar.
+
+---
+
+# Kontribusi
+
+1. Fork repository
+2. Buat branch baru
+
+```bash
+git checkout -b fitur-baru
+```
+
+3. Commit
+
+```bash
+git commit -m "Tambah fitur baru"
+```
+
+4. Push
+
+```bash
+git push origin fitur-baru
+```
+
+5. Buat Pull Request
+
+---
+
+# Author
+
+**Dzbackdor**
+
+GitHub:
+
+https://github.com/Dzbackdor
+
+---
+
+# Changelog
+
+## v2.0.0
+
+- ✅ Perbandingan URL
+- ✅ Perbandingan Domain
+- ✅ Perbandingan Host/Subdomain
+- ✅ Perbandingan Nama File
+- ✅ Duplicate Cleaner
+- ✅ Merge Output
+- ✅ Slash Normalization
+- ✅ URL Normalization
+- ✅ Colored CLI Output
+
+---
+
+Made with ❤️ by **Dzone**
+````
