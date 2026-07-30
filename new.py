@@ -106,6 +106,22 @@ def normalize_host(s: str):
 
     return host
 
+def normalize_file(s):
+    """
+    Normalisasi nama file.
+    Hanya menghapus spasi di awal/akhir.
+    """
+    if not isinstance(s, str):
+        return None
+
+    s = s.strip()
+
+    if not s:
+        return None
+
+    return s
+
+
 # ---------------- Core Ops ---------------- #
 
 def extract_domain_from_url(u: str):
@@ -125,7 +141,12 @@ def compare_files(new_file, old_file, output_file, mode='domain', merge_old=Fals
     print(f"{W}Membandingkan file:")
     print(f"{W}  File baru : {G}{new_file}")
     print(f"{W}  File lama : {Y}{old_file}")
-    label = {'url': 'URL penuh', 'domain': 'Domain (URL output)', 'host': 'Host/Subdomain (list domain)'}[mode]
+    label = {
+    'url': 'URL penuh',
+    'domain': 'Domain (URL output)',
+    'host': 'Host/Subdomain (list domain)',
+    'file': 'Nama File'
+    }[mode]
     print(f"{W}  Mode      : {G}{label}")
     print(f"{W}  Slash     : {G}{'Ya' if add_slash else 'Tidak'}")
     print(f"{W}  Output    : {G}{'Hanya entri BARU' if not merge_old else 'Gabung lama + append baru'}")
@@ -149,18 +170,29 @@ def compare_files(new_file, old_file, output_file, mode='domain', merge_old=Fals
     def normalize_for_mode(s):
         if mode == 'host':
             return normalize_host(s)
+
+        elif mode == 'file':
+            return normalize_file(s)
+
         else:
             return normalize_url(s, add_slash=add_slash)
 
     def key_for(value):
         if value is None:
             return None
+
         if mode == 'url':
-            return value                       # URL normalized (unik per URL)
+            return value
+
         if mode == 'domain':
-            return extract_domain_from_url(value)  # netloc (www dipertahankan)
+            return extract_domain_from_url(value)
+
         if mode == 'host':
-            return value                       # host normalized
+            return value
+
+        if mode == 'file':
+            return value
+
         return None
 
     # Normalisasi isi lama & kumpulkan key
@@ -201,15 +233,26 @@ def compare_files(new_file, old_file, output_file, mode='domain', merge_old=Fals
                     continue
                 if k in keys_seen:
                     dup += 1
-                    what = 'host' if mode == 'host' else ('domain' if mode == 'domain' else 'URL')
+                    # Perbaikan 1: deteksi mode file
+                    if mode == 'host':
+                        what = 'host'
+                    elif mode == 'domain':
+                        what = 'domain'
+                    elif mode == 'file':
+                        what = 'file'
+                    else:
+                        what = 'URL'
                     print(f"{W}Sudah ada {what} ({R}baris {i}{W}): {Y}{k}")
                 else:
                     keys_seen.add(k)
                     new_items.append(n)
+                    # Perbaikan 1: tambahkan kondisi untuk file
                     if mode == 'host':
                         print(f"{W}Host baru: {G}{k}")
                     elif mode == 'domain':
                         print(f"{W}Domain baru: {G}{k} {W}=❯ {Y}{n}")
+                    elif mode == 'file':
+                        print(f"{W}File baru: {G}{n}")
                     else:
                         print(f"{W}URL baru: {Y}{n}")
     except FileNotFoundError:
@@ -253,17 +296,27 @@ def compare_files(new_file, old_file, output_file, mode='domain', merge_old=Fals
 def clean_duplicates(input_file, output_file, mode='domain', add_slash=False):
     """Hapus duplikat sesuai mode; output konsisten."""
     print(f"{W}Membaca dari: {G}{input_file}")
-    label = {'url': 'Hapus duplikat URL exact', 'domain': 'Satu URL per domain', 'host': 'Satu baris per host/subdomain'}[mode]
+    # Perbaikan 2: tambahkan 'file' ke label
+    label = {
+        'url': 'Hapus duplikat URL exact', 
+        'domain': 'Satu URL per domain', 
+        'host': 'Satu baris per host/subdomain',
+        'file': 'Satu baris per nama file'
+    }[mode]
     print(f"{W}Mode: {G}{label} (www dipertahankan)")
     print(f"{W}Slash di akhir path: {G}{'Ya' if add_slash else 'Tidak'}")
 
     def normalize_for_mode(s):
         if mode == 'host':
             return normalize_host(s)
+
+        elif mode == 'file':
+            return normalize_file(s)
+
         else:
             return normalize_url(s, add_slash=add_slash)
     
-    key_fn = (lambda v: v) if mode in ('url', 'host') else extract_domain_from_url
+    key_fn = (lambda v: v) if mode in ('url', 'host', 'file') else extract_domain_from_url
 
     store = OrderedDict()
     dup = inv = total = 0
@@ -325,14 +378,24 @@ def build_parser():
                         argparse.RawTextHelpFormatter):
         pass
 
+    # Perbaikan 4 & 5: perjelas help dan contoh penggunaan
     epi = (
         "Contoh:\n"
-        "  Hanya entri domain baru:  python3 new.py -l baru.txt -c lama.txt -m domain -o tt.txt\n"
-        "  Gabung lama + append baru: python3 new.py -l baru.txt -c lama.txt -m domain -o tt.txt --merge-old"
+        "  # Hapus duplikat URL\n"
+        "  python new.py -l url.txt -m url -o out.txt\n\n"
+        "  # Hapus duplikat domain\n"
+        "  python new.py -l url.txt -m domain -o out.txt\n\n"
+        "  # Hapus duplikat host\n"
+        "  python new.py -l host.txt -m host -o out.txt\n\n"
+        "  # Hapus duplikat nama file\n"
+        "  python new.py -l files.txt -m file -o out.txt\n\n"
+        "  # Bandingkan file baru dan lama (nama file)\n"
+        "  python new.py -l baru.txt -c lama.txt -m file -o new.txt\n\n"
+        "  # Bandingkan URL berdasarkan domain\n"
+        "  python new.py -l baru.txt -c lama.txt -m domain -o new.txt"
     )
 
     parser = argparse.ArgumentParser(
-        # description=desc,
         epilog=epi,
         formatter_class=lambda prog: NeatFormatter(prog, width=120, max_help_position=28)
     )
@@ -345,10 +408,39 @@ def build_parser():
         '-o', '--output', dest='output', required=True, metavar='OUTPUT',
         help='File output hasil (WAJIB).'
     )
+    
+    # Perbaikan 3: hapus default dan buat required=True
     parser.add_argument(
-        '-m', '--mode', dest='mode', choices=['url', 'domain', 'host'], default='domain',
-        help="Mode proses: {url,domain,host}; 'host' untuk list domain (tanpa '/')."
+        '-m', '--mode',
+        required=True,
+        choices=['url', 'domain', 'host', 'file'],
+        # Perbaikan 4: perjelas help
+        help="""
+Mode proses:
+
+-m url     = Bandingkan URL lengkap.
+          Contoh:
+          https://site.com/a
+          https://site.com/b
+
+-m domain  = Bandingkan berdasarkan domain.
+          Output tetap URL pertama yang ditemukan.
+          Contoh:
+          https://site.com/a
+          https://site.com/b
+          => dianggap sama (site.com)
+
+-m host    = Untuk list domain/subdomain saja.
+          Contoh:
+          site.com
+          api.site.com
+
+-m file    = Untuk membandingkan nama file.
+          Contoh:
+          CC-MAIN-20251007013002-00574.txt
+"""
     )
+    
     parser.add_argument(
         '-s', '--slash', dest='add_slash', action='store_true',
         help='Tambahkan "/" di akhir setiap path URL (untuk mode url/domain).'
