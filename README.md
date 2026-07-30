@@ -1,503 +1,229 @@
-````markdown
 # Python URL / Host / File Comparator
 
-🐍 Script Python untuk membersihkan duplikat dan membandingkan daftar:
+Python script untuk membersihkan duplikat dan membandingkan daftar URL, Domain, Host/Subdomain, maupun Nama File.
 
-- URL
-- Domain
-- Host/Subdomain
-- Nama File
+## Features
 
-Script ini cocok digunakan untuk mengelola daftar backlink, domain, subdomain, maupun nama file seperti hasil crawl Common Crawl.
+- Membersihkan duplikat URL
+- Membersihkan duplikat Domain
+- Membersihkan duplikat Host/Subdomain
+- Membersihkan duplikat Nama File
+- Membandingkan file baru dengan file lama
+- Normalisasi URL otomatis
+- Menambahkan trailing slash pada URL (`-s` / `--slash`)
+- Menggabungkan file lama dengan data baru (`--merge-old`)
+- Output terminal berwarna
 
-<img src="/comparator.png" width="700" alt="Python URL Comparator">
+## Requirements
 
-## Rekomendasi Tools
+- Python 3.8+
+- colorama
 
-Tools ini dapat digunakan bersama:
-
-- https://github.com/Dzbackdor/moz-pro-without-api-key
-
----
-
-# Features
-
-- ✅ Membersihkan duplikat URL
-- ✅ Membersihkan duplikat Domain
-- ✅ Membersihkan duplikat Host/Subdomain
-- ✅ Membersihkan duplikat Nama File
-- ✅ Membandingkan file baru dengan file lama
-- ✅ Normalisasi URL otomatis
-- ✅ Opsi penambahan slash (`/`) di akhir URL
-- ✅ Opsi menggabungkan file lama dengan data baru (`--merge-old`)
-- ✅ Output berwarna (Colorama)
-
----
-
-# Instalasi
-
-Clone repository
+## Installation
 
 ```bash
 git clone https://github.com/Dzbackdor/URL-Cleaner-Comparator.git
 cd URL-Cleaner-Comparator
-```
-
-Install dependency
-
-```bash
 pip install -r requirements.txt
 ```
 
-Melihat bantuan
+Melihat bantuan:
 
 ```bash
 python new.py -h
 ```
 
----
+## Command Line Options
 
-# Penggunaan
+| Parameter | Keterangan |
+|-----------|------------|
+| `-l`, `--list` | File input |
+| `-o`, `--output` | File output |
+| `-m`, `--mode` | `url`, `domain`, `host`, `file` |
+| `-c`, `--compare` | File lama untuk dibandingkan |
+| `--merge-old` | Gabungkan isi file lama dengan data baru |
+| `-s`, `--slash` | Tambahkan `/` di akhir URL |
 
-## Membersihkan Duplikat URL
+## Mode
 
-```bash
-python new.py \
--l url.txt \
--m url \
--o hasil.txt
-```
-
----
-
-## Membersihkan Duplikat Domain
-
-```bash
-python new.py \
--l url.txt \
--m domain \
--o hasil.txt
-```
-
----
-
-## Membersihkan Duplikat Host/Subdomain
-
-```bash
-python new.py \
--l host.txt \
--m host \
--o hasil.txt
-```
-
-Contoh isi file:
-
-```text
-google.com
-google.com
-mail.google.com
-api.google.com
-mail.google.com
-```
-
-Output:
-
-```text
-google.com
-mail.google.com
-api.google.com
-```
-
----
-
-## Membersihkan Duplikat Nama File
-
-```bash
-python new.py \
--l files.txt \
--m file \
--o hasil.txt
-```
-
-Contoh isi file:
-
-```text
-CC-MAIN-001.txt
-CC-MAIN-001.txt
-CC-MAIN-002.txt
-CC-MAIN-003.txt
-```
-
-Output:
-
-```text
-CC-MAIN-001.txt
-CC-MAIN-002.txt
-CC-MAIN-003.txt
-```
-
----
-
-# Membandingkan Dua File
-
-## URL
-
-```bash
-python new.py \
--l baru.txt \
--c lama.txt \
--m url \
--o hasil.txt
-```
-
-Output hanya berisi URL yang belum ada pada file lama.
-
----
-
-## Domain
-
-```bash
-python new.py \
--l baru.txt \
--c lama.txt \
--m domain \
--o hasil.txt
-```
-
-Output hanya berisi domain yang belum ada.
-
----
-
-## Host/Subdomain
-
-```bash
-python new.py \
--l host-baru.txt \
--c host-lama.txt \
--m host \
--o hasil.txt
-```
-
----
-
-## Nama File
-
-```bash
-python new.py \
--l file-baru.txt \
--c file-lama.txt \
--m file \
--o hasil.txt
-```
-
----
-
-# Merge Output
-
-Secara default output hanya berisi data baru.
-
-Jika ingin menggabungkan isi file lama dengan data baru gunakan:
-
-```bash
-python new.py \
--l baru.txt \
--c lama.txt \
--m domain \
--o hasil.txt \
---merge-old
-```
-
-Output:
-
-```text
-Isi file lama
-+
-Semua data baru yang belum ada
-```
-
----
-
-# Menambahkan Slash
-
-Script dapat menambahkan slash (`/`) pada akhir URL.
-
-Contoh:
-
-Input
-
-```text
-https://example.com/path
-```
-
-Perintah
-
-```bash
-python new.py \
--l url.txt \
--m url \
--o hasil.txt \
--s
-```
-
-Output
-
-```text
-https://example.com/path/
-```
-
-Opsi yang sama dapat ditulis sebagai:
-
-```bash
---slash
-```
-
----
-
-# Mode
-
-## URL
+### url
 
 Membandingkan URL secara penuh.
 
-Contoh:
-
-```text
-https://example.com/a
-https://example.com/b
+```bash
+python new.py -l url.txt -m url -o hasil.txt
 ```
 
-Dianggap **berbeda**.
-
----
-
-## Domain
+### domain
 
 Membandingkan berdasarkan domain.
 
-Contoh:
-
-```text
-https://example.com/a
-https://example.com/b
+```bash
+python new.py -l url.txt -m domain -o hasil.txt
 ```
 
-Dianggap **sama** karena berasal dari domain yang sama.
+Satu URL pertama akan dipertahankan untuk setiap domain.
 
-Output tetap menggunakan URL pertama yang ditemukan.
+### host
 
----
+Digunakan untuk daftar host atau subdomain.
 
-## Host
+```bash
+python new.py -l host.txt -m host -o hasil.txt
+```
 
-Digunakan untuk daftar domain atau subdomain.
-
-Contoh:
+Contoh input:
 
 ```text
 example.com
-api.example.com
 mail.example.com
+api.example.com
 ```
 
-Setiap host dianggap berbeda.
-
----
-
-## File
+### file
 
 Digunakan untuk membandingkan nama file.
 
-Contoh:
+```bash
+python new.py -l files.txt -m file -o hasil.txt
+```
+
+Contoh input:
 
 ```text
-CC-MAIN-20251007013002-00574.txt
-CC-MAIN-20251007013002-00575.txt
+list-001.txt
+list-002.txt
 ```
 
----
+## Compare Mode
 
-# Parameter
+Bandingkan file baru dengan file lama.
 
-| Parameter | Keterangan |
-|------------|------------|
-| `-l`, `--list` | File input |
-| `-o`, `--output` | File output |
-| `-m`, `--mode` | Mode (`url`, `domain`, `host`, `file`) |
-| `-c`, `--compare` | File lama untuk dibandingkan |
-| `--merge-old` | Gabungkan isi file lama dengan data baru |
-| `-s`, `--slash` | Tambahkan slash (`/`) di akhir URL |
-
----
-
-# Contoh Penggunaan
-
-Membersihkan URL
-
-```bash
-python new.py -l url.txt -m url -o output.txt
-```
-
-Membersihkan Domain
-
-```bash
-python new.py -l url.txt -m domain -o output.txt
-```
-
-Membersihkan Host
-
-```bash
-python new.py -l host.txt -m host -o output.txt
-```
-
-Membersihkan Nama File
-
-```bash
-python new.py -l files.txt -m file -o output.txt
-```
-
-Membandingkan URL
+### URL
 
 ```bash
 python new.py -l baru.txt -c lama.txt -m url -o hasil.txt
 ```
 
-Membandingkan Domain
+### Domain
 
 ```bash
 python new.py -l baru.txt -c lama.txt -m domain -o hasil.txt
 ```
 
-Merge Output
+### Host
+
+```bash
+python new.py -l host-baru.txt -c host-lama.txt -m host -o hasil.txt
+```
+
+### File
+
+```bash
+python new.py -l file-baru.txt -c file-lama.txt -m file -o hasil.txt
+```
+
+Output hanya berisi data yang belum ada pada file lama.
+
+## Merge Output
 
 ```bash
 python new.py -l baru.txt -c lama.txt -m domain -o hasil.txt --merge-old
 ```
 
-Tambah Slash
+Output akan berisi:
+
+- Seluruh isi file lama
+- Data baru yang belum ada
+
+## Trailing Slash
+
+Tambahkan slash di akhir URL.
 
 ```bash
 python new.py -l url.txt -m url -o hasil.txt -s
 ```
 
----
+Input:
 
-# Format File Input
+```text
+https://example.com/path
+```
 
-## URL
+Output:
+
+```text
+https://example.com/path/
+```
+
+## Format Input
+
+### URL
 
 ```text
 https://example.com
-https://google.com/search
-https://github.com
+https://example.com/page
 ```
 
----
-
-## Host
+### Host
 
 ```text
-google.com
-mail.google.com
-api.google.com
+example.com
+mail.example.com
 ```
 
----
-
-## Nama File
+### File
 
 ```text
-CC-MAIN-20251007013002-00574.txt
-CC-MAIN-20251007013002-00575.txt
+list-20251007013002-00574.txt
 ```
 
----
+## Notes
 
-# Output
+- Mode `url` membandingkan URL secara penuh.
+- Mode `domain` membandingkan berdasarkan domain tetapi menyimpan URL pertama.
+- Mode `host` digunakan untuk daftar host/subdomain.
+- Mode `file` digunakan untuk daftar nama file.
+- Parameter `-o` wajib digunakan.
+- URL yang tidak valid akan dilewati otomatis.
 
-Seluruh hasil akan disimpan ke file yang ditentukan menggunakan parameter:
+## Troubleshooting
 
-```bash
--o output.txt
-```
-
-Parameter ini **wajib** diberikan.
-
----
-
-# Troubleshooting
-
-## File tidak ditemukan
-
-```text
-Error: File tidak ditemukan
-```
+### File tidak ditemukan
 
 Pastikan nama file benar atau gunakan path lengkap.
 
----
+### URL tidak valid
 
-## URL tidak valid
+URL yang tidak valid akan diabaikan dan tidak dimasukkan ke output.
 
-URL yang tidak valid akan diabaikan dan dihitung pada statistik akhir.
+### Encoding
 
----
+Gunakan file UTF-8.
 
-## Encoding
+## Contributing
 
-Gunakan file UTF-8 agar seluruh karakter dapat dibaca dengan benar.
+1. Fork repository.
+2. Buat branch baru.
+3. Commit perubahan.
+4. Push ke repository.
+5. Buat Pull Request.
 
----
+## Author
 
-# Kontribusi
-
-1. Fork repository
-2. Buat branch baru
-
-```bash
-git checkout -b fitur-baru
-```
-
-3. Commit
-
-```bash
-git commit -m "Tambah fitur baru"
-```
-
-4. Push
-
-```bash
-git push origin fitur-baru
-```
-
-5. Buat Pull Request
-
----
-
-# Author
-
-**Dzbackdor**
-
-GitHub:
+Dzbackdor
 
 https://github.com/Dzbackdor
 
----
+## Changelog
 
-# Changelog
+### v2.0.0
 
-## v2.0.0
-
-- ✅ Perbandingan URL
-- ✅ Perbandingan Domain
-- ✅ Perbandingan Host/Subdomain
-- ✅ Perbandingan Nama File
-- ✅ Duplicate Cleaner
-- ✅ Merge Output
-- ✅ Slash Normalization
-- ✅ URL Normalization
-- ✅ Colored CLI Output
-
----
-
-Made with ❤️ by **Dzone**
-````
+- URL compare
+- Domain compare
+- Host compare
+- File compare
+- Duplicate cleaner
+- Merge output
+- Slash normalization
+- URL normalization
